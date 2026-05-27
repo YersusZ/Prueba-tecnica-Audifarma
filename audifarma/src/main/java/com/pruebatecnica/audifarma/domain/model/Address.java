@@ -3,37 +3,31 @@
 package com.pruebatecnica.audifarma.domain.model;
 import java.util.UUID;
 
-public class Address{
-    private UUID id;
-    private String departament;
-    private String city;
-    private String fullAddress;
+public record Address(
+    UUID id,
+    String departament,
+    String city,
+    String fullAddress
+) {
 
-    public UUID getId() {
-        return id;
+
+    public Address {
+        if (departament == null || departament.trim().isEmpty()) {
+            throw new IllegalArgumentException("El departamento no puede estar vacío");
+        }
+        if (city == null || city.trim().isEmpty()) {
+            throw new IllegalArgumentException("La ciudad no puede estar vacía");
+        }
+        if (fullAddress == null || fullAddress.trim().isEmpty()) {
+            throw new IllegalArgumentException("La dirección completa no puede estar vacía");
+        }
     }
 
-    public String getDepartament() {
-        return departament;
+    public static Address create(String departament, String city, String fullAddress) {
+        return new Address(UUID.randomUUID(), departament, city, fullAddress);
     }
 
-    public void setDepartament(String departament) {
-        this.departament = departament;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getFullAddress() {
-        return fullAddress;
-    }
-
-    public void setFullAddress(String fullAddress) {
-        this.fullAddress = fullAddress;
+    public Address withId(UUID newId) {
+        return new Address(newId, departament, city, fullAddress);
     }
 }
